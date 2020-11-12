@@ -1,0 +1,37 @@
+Jenkins Container Install/update Notes (2020)
+======================================
+
+
+<#>docker run -u 0 --privileged --name jenkins-p -it -d -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):/usr/bin/docker -v jenkins_home:/var/jenkins_home jenkins/jenkins:latest
+
+
+
+[root@dock01 ~]# docker ps | grep jenkins
+385a819d6892        ca03aad4393c             "/sbin/tini -- /usr/…"   4 months ago        Up 33 minutes           0.0.0.0:8080->8080/tcp, 0.0.0.0:50000->50000/tcp jenkins-p
+
+
+
+UPDATE JENKINS TO 2.266 (2021113):
+========================
+
+https://medium.com/@jimkang/how-to-start-a-new-jenkins-container-and-update-jenkins-with-docker-cf628aa495e9
+
+UPDATE in container:
+
+root@385a819d6892:/tmp# wget http://mirrors.jenkins.io/war/2.266/jenkins.war
+--2020-11-12 18:17:11--  http://mirrors.jenkins.io/war/2.266/jenkins.war
+Resolving mirrors.jenkins.io (mirrors.jenkins.io)... 52.202.51.185
+Connecting to mirrors.jenkins.io (mirrors.jenkins.io)|52.202.51.185|:80... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: http://ftp-chi.osuosl.org/pub/jenkins/war/2.266/jenkins.war [following]
+--2020-11-12 18:17:11--  http://ftp-chi.osuosl.org/pub/jenkins/war/2.266/jenkins.war
+Resolving ftp-chi.osuosl.org (ftp-chi.osuosl.org)... 64.50.236.52, 2600:3402:200:227::2
+Connecting to ftp-chi.osuosl.org (ftp-chi.osuosl.org)|64.50.236.52|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 70971784 (68M) [application/x-java-archive]
+Saving to: ‘jenkins.war’
+
+jenkins.war                            100%[==========================================================================>]  67.68M  12.5MB/s    in 8.8s
+
+2020-11-12 18:17:20 (7.66 MB/s) - ‘jenkins.war’ saved [70971784/70971784]
+
