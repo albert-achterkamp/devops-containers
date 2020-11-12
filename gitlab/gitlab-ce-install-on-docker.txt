@@ -1,0 +1,48 @@
+Install gitlab-ce on docker
+
+https://computingforgeeks.com/how-to-install-and-configure-gitlab-on-centos-rhel/
+
+https://ahelpme.com/linux/install-gitlab-ce-community-edition-in-docker-container-with-https-and-docker-registry/
+
+
+Installer script
+----------------
+
+curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash
+
+Run container
+-------------
+
+docker run --detach \
+   -e VIRTUAL_HOST=gitlab.docker.bachter.net \
+   -e GITLAB_DOMAIN=gitlab.docker.bachter.net \
+   -e VIRTUAL_PORT=80 \
+   -e GITLAB_PORT=8090 \
+  --hostname gitlab.docker.bachter.net \
+  --publish 443:443 --publish 8090:8090 --publish 1022:22 --publish 4567:4567 \
+  --name gitlab \
+  --restart always \
+  --volume /srv/gitlab/config:/etc/gitlab \
+  --volume /srv/gitlab/logs:/var/log/gitlab \
+  --volume /srv/gitlab/data:/var/opt/gitlab \
+  gitlab/gitlab-ce:latest
+
+
+# docker ps | grep gitlab
+90250c682d5e        cf9a70ff9fb1             "/assets/wrapper"        5 months ago        Up 3 months (healthy)   0.0.0.0:443->443/tcp, 0.0.0.0:4567->4567/tcp, 80/tcp, 0.0.0.0:8090->8090/tcp, 0.0.0.0:1022->22/tcp   gitlab-ce
+
+
+
+Create Backup of data and config (and mail log file to gmail address)
+--------------------------------
+
+# cat gl_backup.sh
+#!/bin/bash
+set -x
+GL_CONT=`docker ps --format '{{.Names}}' | grep gitlab`
+BU_DATE=`date +\%Y\%m\%d\%H\%M`
+DATE=`date`
+/usr/bin/docker exec -t $GL_CONT  gitlab-backup create | sed -e "s/^M//" | sed 's/\x1b\[[^\x1b]*m//g' > /root/gitlab-backup-${BU_DATE}.log 2>&1
+echo "Backup report: $DATE \n `ls -latr /srv/gitlab/data/backups/*gitlab_backup.tar | tail -1`" | mailx -s "gitlab-backup-${GL_CONT}-${BU_DATE}" -a "/root/gitlab-backup-${BU_DATE}.log"  bachter@gmail.com
+
+
