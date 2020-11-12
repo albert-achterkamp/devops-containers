@@ -1,0 +1,22 @@
+Install Openvpn-as on docker
+============================
+
+docker create   --name=openvpn-as   --cap-add=NET_ADMIN   -e PUID=1000   -e PGID=1000   -e TZ=Europe/Berlin   -p 943:943   -p 9443:9443   -p 1194:1194/udp   --volume /srv/openvpn-as/config:/config   --restart unless-stopped   linuxserver/openvpn-as
+
+-- https://gitlab.com/Linuxserver.io/docker-openvpn-as
+
+docker create \
+  --name=openvpn-as \
+  --cap-add=NET_ADMIN \
+  -e PUID=1000 \
+  -e PGID=1000 \
+  -e TZ=Europe/Berlin \
+  -p 943:943 \
+  -p 9443:9443 \
+  -p 1194:1194/udp \
+  --volume /srv/openvpn-as/config:/config \
+  --restart unless-stopped \
+  linuxserver/openvpn-as
+
+  -e INTERFACE=eth0 `#optional` \
+
