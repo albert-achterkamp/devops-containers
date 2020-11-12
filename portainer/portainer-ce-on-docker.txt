@@ -1,0 +1,15 @@
+Install portainer-ce on Docker
+==============================
+
+
+docker run -d -p 9000:9000 --name portainer_ce --restart always -v /var/run/docker.sock:/var/run/docker.sock -v /opt/portainer:/data portainer/portainer-ce
+
+
+docker ps
+---------
+
+CONTAINER ID        IMAGE                    COMMAND                  CREATED             STATUS                  PORTS                                                                                                NAMES
+877967f41b54        portainer/portainer-ce   "/portainer"             2 hours ago         Up 2 hours              8000/tcp, 0.0.0.0:9000->9000/tcp                                                                     portainer_ce
+
+
+Thu Nov 12 20:28:14 CET 2020
