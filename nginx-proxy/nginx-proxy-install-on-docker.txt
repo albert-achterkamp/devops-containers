@@ -1,4 +1,4 @@
-Use this container to proxy all public container ports to https including letscencrypt cert for each container
+Use this container to proxy all public container ports to https including Letsencrypt cert for each container
 
 Restart letsencrypt-nginx-proxy-companion container for instant delivery of a new proxied container incl LE cert !
 
